@@ -3,37 +3,19 @@ import torch
 
 
 def guassian_kernel(source, target, kernel_mul=2.0, kernel_num=5, fix_sigma=None):
-    """计算Gram核矩阵
-    source: sample_size_1 * feature_size 的数据（n * len(x))
-    target: sample_size_2 * feature_size 的数据（m * len(y))
-    kernel_mul: 这个概念不太清楚，感觉也是为了计算每个核的bandwith
-    kernel_num: 取不同高斯核的数量
-    fix_sigma: 表示是否使用固定的标准差
-        return: 多个核矩阵之和
-        (sample_size_1 + sample_size_2) * (sample_size_1 + sample_size_2)的矩阵，表达形式:
-                        [   K_ss K_st
-                            K_ts K_tt ]
-    """
-    n_samples = int(source.size()[0])+int(target.size()[0])  # 求矩阵的行数，一般source和target的尺度是一样的，这样便于计算
-    total = torch.cat([source, target], dim=0)  # 将source,target按列方向合并
-    # 将total复制（n+m）份
+    n_samples = int(source.size()[0])+int(target.size()[0])
+    total = torch.cat([source, target], dim=0)
     total0 = total.unsqueeze(0).expand(int(total.size(0)), int(total.size(0)), int(total.size(1)))
-    # 将total的每一行都复制成（n+m）行，即每个数据都扩展成（n+m）份
     total1 = total.unsqueeze(1).expand(int(total.size(0)), int(total.size(0)), int(total.size(1)))
-    # 求任意两个数据之间的和，得到的矩阵中坐标（i,j）代表total中第i行数据和第j行数据之间的l2 distance(i==j时为0）
     L2_distance = ((total0-total1)**2).sum(2)
 
-    # 计算多核中每个核的bandwidth
     if fix_sigma:
         bandwidth = fix_sigma
     else:
         bandwidth = torch.sum(L2_distance.data) / (n_samples**2-n_samples)
-    # 以fix_sigma为中值，以kernel_mul为倍数取kernel_num个bandwidth值（比如fix_sigma为1时，得到[0.25,0.5,1,2,4]
     bandwidth /= kernel_mul ** (kernel_num // 2)
     bandwidth_list = [bandwidth * (kernel_mul**i) for i in range(kernel_num)]
-    # 高斯核函数的数学表达式 exp(-|x-y|/bandwith)
     kernel_val = [torch.exp(-L2_distance / bandwidth_temp) for bandwidth_temp in bandwidth_list]
-    # 得到最终的核矩阵
     return sum(kernel_val)
 
 
@@ -47,11 +29,11 @@ def mmd_gaussian(source, target, kernel_mul=2.0, kernel_num=5, fix_sigma=None):
     XY = kernels[:n, n:]
     YX = kernels[n:, :n]
 
-    XX = torch.div(XX, n * n).sum(dim=1).view(1, -1)  # K_ss矩阵，Source<->Source
-    XY = torch.div(XY, -n * m).sum(dim=1).view(1, -1)  # K_st矩阵，Source<->Target
+    XX = torch.div(XX, n * n).sum(dim=1).view(1, -1)
+    XY = torch.div(XY, -n * m).sum(dim=1).view(1, -1)
 
-    YX = torch.div(YX, -m * n).sum(dim=1).view(1, -1)  # K_ts矩阵,Target<->Source
-    YY = torch.div(YY, m * m).sum(dim=1).view(1, -1)  # K_tt矩阵,Target<->Target
+    YX = torch.div(YX, -m * n).sum(dim=1).view(1, -1)
+    YY = torch.div(YY, m * m).sum(dim=1).view(1, -1)
 
     loss = (XX + XY).sum() + (YX + YY).sum()
     return loss
@@ -61,20 +43,3 @@ def mmd_linear(f_of_X, f_of_Y):  # shape: [bs, feat_channel]
     delta = f_of_X - f_of_Y
     loss = torch.mean(torch.mm(delta, torch.transpose(delta, 0, 1)))
     return loss
-
-
-if __name__ == "__main__":
-    # 样本数量可以不同，特征数目必须相同
-
-    # 100和90是样本数量，50是特征数目
-    data_1 = torch.tensor(np.random.normal(loc=0, scale=10, size=(100, 50)))
-    data_2 = torch.tensor(np.random.normal(loc=10, scale=10, size=(100, 50)))
-    print("MMD Loss:", mmd_linear(data_1, data_2))
-
-    data_1 = torch.tensor(np.random.normal(loc=0, scale=10, size=(100, 50)))
-    data_2 = torch.tensor(np.random.normal(loc=0, scale=9, size=(80, 50)))
-
-    print("MMD Loss:", mmd_linear(data_1, data_2))
-
-    # MMD Loss: tensor(1.0866, dtype=torch.float64)
-    # MMD Loss: tensor(0.0852, dtype=torch.float64)
