@@ -1,4 +1,4 @@
-# STGCN
+# UFANet
 
 #### This is a code implemention of the UFA-Net method proposed in the manuscipt "Unsupervised Cross-Domain Functional MRI Adaptation for Automated Major Depressive Disorder Identification".
 
