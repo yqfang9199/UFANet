@@ -9,11 +9,11 @@ We construct a demo consisting of 10 source examples and 10 target examples.
 Run: `synthesize_data.py`<br>
 
 The shape of the constructed data and label:<br>
-src_data `(SrcNum, 1, T, NodeNum, 1)`<br>
-src_lbl `(SrcNum, )`<br>
-tgt_data `(TgtNum, 1, T, NodeNum, 1)`<br>
-tgt_lbl `(TgtNum, )`<br>
-adj_matrix `(NodeNum, NodeNum)`<br>
+> src_data.npy `(SrcNum, 1, T, NodeNum, 1)`<br>
+> src_lbl.npy `(SrcNum, )`<br>
+> tgt_data.npy `(TgtNum, 1, T, NodeNum, 1)`<br>
+> tgt_lbl.npy `(TgtNum, )`<br>
+> adj_matrix.npy `(NodeNum, NodeNum)`<br>
 
 where<br>
 `SrcNum` is the number of subjects in the source domain<br>
