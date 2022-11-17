@@ -32,3 +32,10 @@ The pretrained model is saved in: `../codes/checkpoints_pretrain/`
 Run: `../codes/main_UDA.py`<br>
 The classification results are saved in: `../codes/checkpoints/`
 
+
+#### Required packages:<br>
+`torch==1.10.0`<br>
+`torchvision==0.2.1`<br>
+`numpy==1.21.2`<br>
+`scikit_learn==1.1.3`<br>
+
