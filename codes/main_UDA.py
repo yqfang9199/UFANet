@@ -158,7 +158,7 @@ def test_ddcnet(model, target_loader) -> object:
 if __name__ == '__main__':
 
     ROOT_PATH = '../data/'
-    SAVE_PATH = '../codes/checkpoints_pretrain/'
+    SAVE_PATH = '../codes/checkpoints/'
 
     BATCH_SIZE = 10  # original: 128
     TRAIN_EPOCHS = 100
@@ -191,11 +191,13 @@ if __name__ == '__main__':
         target_train_loader = DataLoader(target_dataset, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
         target_test_loader = DataLoader(target_dataset, batch_size=BATCH_SIZE, shuffle=False, drop_last=False)
 
-        print('Load data complete!')
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        print('device:', device)
 
+        print('Load data complete!')
         # load pretrained model
         ddcnet_pre = pre_Model(in_channels=1, num_class=1, edge_importance_weighting=True)
-        ddcnet_pre.load_state_dict(torch.load('../codes/checkpoints_pretrain/fold_'+str(fold)+'_epoch_20.pth', map_location='cuda:0'))
+        ddcnet_pre.load_state_dict(torch.load('../codes/checkpoints_pretrain/fold_'+str(fold)+'_epoch_20.pth', map_location=device))
         ddcnet_pre_dict = ddcnet_pre.state_dict()
         # construct new model
         ddcnet = Model(in_channels=1, num_class=1, edge_importance_weighting=True)
@@ -203,10 +205,6 @@ if __name__ == '__main__':
         ddcnet_pre_dict = {k: v for k, v in ddcnet_pre_dict.items() if k in ddcnet_dict}
         ddcnet_dict.update(ddcnet_pre_dict)
         ddcnet.load_state_dict(ddcnet_dict)
-
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        print('device:', device)
-
         ddcnet.to(device)
 
         with open(SAVE_PATH + 'fold_' + str(fold) + '_train_loss_and_acc.txt', 'a') as f:
