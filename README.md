@@ -2,6 +2,11 @@
 
 #### This is a code implemention of the UFA-Net method proposed in the manuscipt "Unsupervised Cross-Domain Functional MRI Adaptation for Automated Major Depressive Disorder Identification".
 
+### 0. Dependencies
+`torch==1.10.0`<br>
+`torchvision==0.2.1`<br>
+`numpy==1.21.2`<br>
+`scikit_learn==1.1.3`<br>
 
 ### 1. Data Construction
 We construct a demo consisting of 10 source examples and 10 target examples.
@@ -32,10 +37,4 @@ The pretrained model is saved in: `checkpoints_pretrain`
 Run: `main_UDA.py`<br>
 The classification results are saved in: `checkpoints`
 
-
-#### Required packages:<br>
-`torch==1.10.0`<br>
-`torchvision==0.2.1`<br>
-`numpy==1.21.2`<br>
-`scikit_learn==1.1.3`<br>
 
