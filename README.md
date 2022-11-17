@@ -25,12 +25,12 @@ where<br>
 This is a two-step optimization method.
 
 #### 2.1. Using $L_{C}$ to initialize the network parameter (not involve domain adaptation)<br>
-Run: `../codes/main_pretrain.py`<br>
-The pretrained model is saved in: `../codes/checkpoints_pretrain/`
+Run: `main_pretrain.py`<br>
+The pretrained model is saved in: `checkpoints_pretrain`
 
 #### 2.2. Using $L_{C}$ and $L_{MMD}$ to train the whole network<br>
-Run: `../codes/main_UDA.py`<br>
-The classification results are saved in: `../codes/checkpoints/`
+Run: `main_UDA.py`<br>
+The classification results are saved in: `checkpoints`
 
 
 #### Required packages:<br>
