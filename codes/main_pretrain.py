@@ -38,7 +38,7 @@ def train_ddcnet(epoch, model, learning_rate, source_loader, drop, epochs_drop):
     log_interval = 1
     LEARNING_RATE = step_decay(epoch, learning_rate, drop, epochs_drop)
     print(f'Learning Rate: {LEARNING_RATE}')
-    optimizer = optim.SGD(pre_ddcnet.parameters(), lr=LEARNING_RATE, momentum=MOMENTUM, weight_decay=L2_DECAY)
+    optimizer = optim.SGD(model.parameters(), lr=LEARNING_RATE, momentum=MOMENTUM, weight_decay=L2_DECAY)
     clf_criterion = nn.BCELoss()
 
     model.train()
