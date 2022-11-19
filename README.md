@@ -37,4 +37,16 @@ The pretrained model is saved in: `checkpoints_pretrain`
 In folder `codes`, Run: `python main_UDA.py`<br>
 The classification results are saved in: `checkpoints`
 
+### We have organized our source code as an installable standard Python package:
+* Code package installation: `pip install UFANET`<br>
+
+* Pretrained model optimization on labeled source domain:<br>
+`from UFA.main_pretrain import main_pretrain`<br>
+`main_pretrain(ROOT_PATH='/data/path/directory/', SAVE_PATH='/pretrain_result/path/directory/')`<br>
+where `ROOT_PATH` is the data directory, and `SAVE_PATH` is the directory saving the pretrained checkpoints.
+
+* Adaptation model optimization on labeled source domain and unlabeled target domain:<br>
+`from UFA.main_UDA import main_UDA`<br>
+`main_UDA(ROOT_PATH='/data/path/directory/', LOAD_PATH='/pretrain_result/path/directory/', SAVE_PATH='/final_result/path/directory/')`<br>
+where `LOAD_PATH` is the directory for checkpoints saved in the pretrained stage, and `SAVE_PATH` is the directory for final test results.
 
