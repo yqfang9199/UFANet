@@ -37,7 +37,7 @@ The pretrained model is saved in: `checkpoints_pretrain`
 In folder `codes`, Run: `python main_UDA.py`<br>
 The classification results are saved in: `checkpoints`
 
-### We have organized our source code as an installable standard Python package:
+### 3. Python API
 * Code package installation: `pip install UFANET`<br>
 
 * Pretrained model optimization on labeled source domain:<br>
