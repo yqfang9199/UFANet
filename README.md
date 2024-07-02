@@ -1,6 +1,6 @@
 # UFANet
 
-#### This is a code implemention of the UFA-Net method proposed in the manuscipt "Unsupervised Cross-Domain Functional MRI Adaptation for Automated Major Depressive Disorder Identification".
+#### This is a code implemention of the UFA-Net method proposed in the manuscript "Unsupervised Cross-Domain Functional MRI Adaptation for Automated Major Depressive Disorder Identification".
 
 ### 0. Dependencies
 `torch==1.10.0`<br>
